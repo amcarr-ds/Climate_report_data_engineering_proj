@@ -27,7 +27,7 @@ DESC emissions_gross;
 SHOW VARIABLES LIKE 'secure_file_priv';
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/GCB2022v27_MtCO2_flat.csv'
-	INTO TABLE emissions_gross 
+	INTO TABLE emissions_gross
 FIELDS TERMINATED BY ','
 optionally enclosed by '"'
 LINES TERMINATED BY '\r\n'
