@@ -32,7 +32,7 @@ SHOW VARIABLES LIKE 'secure_file_priv';
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/world_population.csv'
 	INTO TABLE population
 FIELDS TERMINATED BY ','
-optionally enclosed by '"'
+OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
 (pop_rank,

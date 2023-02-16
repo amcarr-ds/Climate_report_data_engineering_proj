@@ -29,10 +29,20 @@ SHOW VARIABLES LIKE 'secure_file_priv';
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/GCB2022v27_MtCO2_flat.csv'
 	INTO TABLE emissions_gross
 FIELDS TERMINATED BY ','
-optionally enclosed by '"'
+OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
-(country, iso_3166_1_a3, record_year, total, coal, oil, gas, cement, flaring, other, per_capita)
+(country,
+iso_3166_1_a3,
+record_year,
+total,
+coal,
+oil,
+gas,
+cement,
+flaring,
+other,
+per_capita)
 ;
 
 SELECT * FROM emissions_gross
@@ -46,7 +56,14 @@ UPDATE emissions_gross
 SET iso_3166_1_a3 = NULL
 WHERE iso_3166_1_a3 = '';
 
-SELECT *, COUNT(country) FROM emissions_gross
+SELECT DISTINCT country FROM emissions_gross
+ORDER BY country
+LIMIT 100000;
+
+SELECT * FROM emissions_gross
+WHERE country IN ("Côte d'Ivoire", "Réunion");
+
+SELECT country, COUNT(country) AS missing_iso_count FROM emissions_gross
 WHERE iso_3166_1_a3 IS NULL
 GROUP BY country
 LIMIT 100000;
@@ -96,7 +113,7 @@ GROUP BY country, iso_3166_1_a3
 LIMIT 100000;
 
 SELECT * FROM emissions_gross
-WHERE iso_3166_1_a3 = 'AFG' AND e_year BETWEEN 1970 AND 1979;
+WHERE iso_3166_1_a3 = 'AFG' AND record_year BETWEEN 1970 AND 1979;
 
 SELECT * FROM emissions_gross
 LIMIT 100000;
