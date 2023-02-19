@@ -2,11 +2,11 @@ USE 507_final_proj;
 
 DROP TABLE IF EXISTS population;
 
-/*__________________________*/
+/*Create table based on columns available in the 'world_population.csv' source file*/
 CREATE TABLE population
 (pop_id SMALLINT UNSIGNED AUTO_INCREMENT,
 pop_rank VARCHAR(30),
-iso_3166_1_a3 VARCHAR(30),
+iso3 VARCHAR(30),
 country VARCHAR(100),
 capital VARCHAR(100),
 continent VARCHAR(100),
@@ -26,7 +26,7 @@ CONSTRAINT pk_pop_id PRIMARY KEY (pop_id)
 );
 DESC population;
 
-/*__________________________*/
+/*Load data directly from a CSV file using the secure-file-priveleges folder path*/
 SHOW VARIABLES LIKE 'secure_file_priv';
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/world_population.csv'
@@ -36,7 +36,7 @@ OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
 (pop_rank,
-iso_3166_1_a3,
+iso3,
 country,
 capital,
 continent,
@@ -51,33 +51,5 @@ pop_1970,
 area,
 density,
 grow_rate,
-pop_perc
-)
+pop_perc)
 ;
-
-SELECT * FROM population
-LIMIT 100000;
-
-SELECT * FROM population
-WHERE iso_3166_1_a3 = ''
-LIMIT 100000;
-
-UPDATE population
-SET iso_3166_1_a3 = NULL
-WHERE iso_3166_1_a3 = '';
-
-SELECT *, COUNT(country) FROM population
-WHERE iso_3166_1_a3 IS NULL
-GROUP BY country
-LIMIT 100000;
-
-SELECT * FROM population
-WHERE country IS NULL
-LIMIT 100000;
-
-SELECT country, iso_3166_1_a3, COUNT(iso_3166_1_a3) FROM population
-GROUP BY country, iso_3166_1_a3
-LIMIT 100000;
-
-SELECT * FROM population
-LIMIT 100000;

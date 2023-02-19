@@ -2,7 +2,7 @@ USE 507_final_proj;
 
 DROP TABLE IF EXISTS temperature;
 
-/*__________________________*/
+/*Create table based on columns available in the 'FAOSTAT_data_1-10-2022.csv' source file*/
 CREATE TABLE temperature
 (domain_code VARCHAR(100),
 domain VARCHAR(100),
@@ -21,7 +21,7 @@ flag_desc VARCHAR(100)
 );
 DESC temperature;
 
-/*__________________________*/
+/*Load data directly from a CSV file using the secure-file-priveleges folder path*/
 SHOW VARIABLES LIKE 'secure_file_priv';
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/test.csv'
@@ -45,6 +45,3 @@ temp,
 flag,
 flag_desc)
 ;
-
-SELECT * FROM temperature
-LIMIT 100000;
