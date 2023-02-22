@@ -25,6 +25,7 @@ cement VARCHAR(30),
 flaring VARCHAR(30),
 other VARCHAR(30),
 per_capita VARCHAR(30),
+country_code VARCHAR(30),
 CONSTRAINT pk_eg_id PRIMARY KEY (eg_id)
 );
 DESC emissions_gross;
@@ -106,8 +107,9 @@ area VARCHAR(30),
 density VARCHAR(30),
 grow_rate VARCHAR(30),
 pop_perc VARCHAR(30),
-variable VARCHAR(30),
-value VARCHAR(30),
+year VARCHAR(30),
+population VARCHAR(30),
+country_code VARCHAR(30),
 CONSTRAINT pk_pop_trans_id PRIMARY KEY (pop_trans_id)
 );
 DESC population_trans;
@@ -129,7 +131,7 @@ unit VARCHAR(100),
 temp VARCHAR(100),
 flag VARCHAR(100),
 flag_desc VARCHAR(100),
-iso3 VARCHAR(30)
+country_code VARCHAR(30)
 );
 DESC temperature;
 
@@ -184,7 +186,15 @@ DESC iso_tempy;
 /*__________________________*/
 CREATE TABLE country_map
 (country_error VARCHAR(100),
-iso3 CHAR(3),
+country_code VARCHAR(30),
 CONSTRAINT pk_country_error PRIMARY KEY (country_error)
 );
 DESC country_map;
+
+/*Insert mapping values for incorrectly recorded country names*/
+INSERT INTO country_map (country_error, country_code)
+VALUES
+("C?te d'Ivoire", "107"),
+("R?union", "182");
+
+/*Perform initial review 
