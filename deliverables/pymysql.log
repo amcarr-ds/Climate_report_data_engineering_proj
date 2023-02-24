@@ -1,0 +1,1274 @@
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,807 - INFO - Successfully executed query:
+DELETE FROM iso_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,808 - INFO - Time taken: 0.002 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,816 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/FAOSTAT_data_11-24-2020.csv'
+        INTO TABLE iso_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    country_code,
+    country,
+    m49_code,
+    iso2,
+    iso3,
+    year_start,
+    year_end
+    )
+    
+
+Records scanned: 321
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,817 - INFO - Time taken: 0.009 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,821 - INFO - Successfully executed query:
+
+    INSERT INTO iso
+    (
+    country_code,
+    country,
+    m49_code,
+    iso2,
+    iso3,
+    year_start,
+    year_end
+    )
+    SELECT
+        tp.country_code,
+        tp.country,
+        tp.m49_code,
+        tp.iso2,
+        tp.iso3,
+        tp.year_start,
+        tp.year_end
+    FROM iso_tempy AS tp
+    LEFT JOIN iso AS mn
+        ON tp.iso3 = mn.iso3
+    WHERE mn.iso3 IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,821 - INFO - Time taken: 0.004 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,823 - INFO - Successfully executed query:
+DELETE FROM iso_tempy
+
+Records scanned: 321
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,824 - INFO - Time taken: 0.003 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,837 - INFO - Successfully executed query:
+DELETE FROM emissions_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:05,837 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,158 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/GCB2022v27_MtCO2_flat.csv'
+        INTO TABLE emissions_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    country,
+    iso3,
+    record_year,
+    total,
+    coal,
+    oil,
+    gas,
+    cement,
+    flaring,
+    other,
+    per_capita
+    )
+    
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,158 - INFO - Time taken: 0.321 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,396 - INFO - Successfully executed query:
+
+    INSERT INTO emissions_gross
+    (
+    country,
+    iso3,
+    record_year,
+    total,
+    coal,
+    oil,
+    gas,
+    cement,
+    flaring,
+    other,
+    per_capita
+    )
+    SELECT
+        tp.country,
+        tp.iso3,
+        tp.record_year,
+        tp.total,
+        tp.coal,
+        tp.oil,
+        tp.gas,
+        tp.cement,
+        tp.flaring,
+        tp.other,
+        tp.per_capita
+    FROM emissions_tempy AS tp
+    LEFT JOIN emissions_gross AS mn
+        ON tp.iso3 = mn.iso3 AND tp.record_year = mn.record_year
+    WHERE mn.iso3 IS NULL AND mn.record_year IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,397 - INFO - Time taken: 0.239 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,743 - INFO - Successfully executed query:
+DELETE FROM emissions_tempy
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,743 - INFO - Time taken: 0.346 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,763 - INFO - Successfully executed query:
+DELETE FROM population_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,763 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,768 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/world_population.csv'
+        INTO TABLE population_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    pop_rank,
+    iso3,
+    country,
+    capital,
+    continent,
+    pop_2022,
+    pop_2020,
+    pop_2015,
+    pop_2010,
+    pop_2000,
+    pop_1990,
+    pop_1980,
+    pop_1970,
+    area,
+    density,
+    grow_rate,
+    pop_perc
+    )
+    
+
+Records scanned: 234
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,769 - INFO - Time taken: 0.005 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,771 - INFO - Successfully executed query:
+
+    INSERT INTO population
+    (
+    pop_rank,
+    iso3,
+    country,
+    capital,
+    continent,
+    pop_2022,
+    pop_2020,
+    pop_2015,
+    pop_2010,
+    pop_2000,
+    pop_1990,
+    pop_1980,
+    pop_1970,
+    area,
+    density,
+    grow_rate,
+    pop_perc
+    )
+    SELECT
+        tp.pop_rank,
+        tp.iso3,
+        tp.country,
+        tp.capital,
+        tp.continent,
+        tp.pop_2022,
+        tp.pop_2020,
+        tp.pop_2015,
+        tp.pop_2010,
+        tp.pop_2000,
+        tp.pop_1990,
+        tp.pop_1980,
+        tp.pop_1970,
+        tp.area,
+        tp.density,
+        tp.grow_rate,
+        tp.pop_perc
+    FROM population_tempy AS tp
+    LEFT JOIN population AS mn
+        ON tp.iso3 = mn.iso3
+    WHERE mn.iso3 IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,772 - INFO - Time taken: 0.003 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,774 - INFO - Successfully executed query:
+DELETE FROM population_tempy
+
+Records scanned: 234
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:06,775 - INFO - Time taken: 0.003 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:08,204 - INFO - Successfully executed query:
+DELETE FROM temperature_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:08,204 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:09,645 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/FAOSTAT_data_1-10-2022_new.csv'
+        INTO TABLE temperature_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    (
+    domain_code,
+    domain,
+    area_code,
+    country,
+    element_code,
+    element,
+    month_code,
+    month_name,
+    year_code,
+    record_year,
+    unit,
+    temp,
+    flag,
+    flag_desc
+    )
+    
+
+Records scanned: 229925
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:09,645 - INFO - Time taken: 1.442 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:10,747 - INFO - Successfully executed query:
+
+    INSERT INTO temperature
+    (
+    domain_code,
+    domain,
+    area_code,
+    country,
+    element_code,
+    element,
+    month_code,
+    month_name,
+    year_code,
+    record_year,
+    unit,
+    temp,
+    flag,
+    flag_desc
+    )
+    SELECT
+        tp.domain_code,
+        tp.domain,
+        tp.area_code,
+        tp.country,
+        tp.element_code,
+        tp.element,
+        tp.month_code,
+        tp.month_name,
+        tp.year_code,
+        tp.record_year,
+        tp.unit,
+        tp.temp,
+        tp.flag,
+        tp.flag_desc
+    FROM temperature_tempy AS tp
+    LEFT JOIN temperature AS mn
+        ON tp.country = mn.country AND tp.month_code = mn.month_code AND tp.year_code = mn.year_code
+    WHERE mn.country IS NULL AND  mn.month_code IS NULL AND mn.year_code IS NULL
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:10,748 - INFO - Time taken: 1.102 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:11,921 - INFO - Successfully executed query:
+DELETE FROM temperature_tempy
+
+Records scanned: 229925
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:11,922 - INFO - Time taken: 1.174 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:31,505 - INFO - Successfully executed query:
+
+    UPDATE emissions_gross AS t1
+    INNER JOIN iso AS t2
+        ON t1.iso3 = t2.iso3
+    SET t1.country = t2.country
+    WHERE t1.country <> t2.country AND t1.iso3 <> ''
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:31,506 - INFO - Time taken: 17.118 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:52,472 - INFO - Successfully executed query:
+
+    UPDATE emissions_gross AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:52,472 - INFO - Time taken: 20.966 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:53,265 - INFO - Successfully executed query:
+
+    UPDATE population_trans AS t1
+    INNER JOIN iso AS t2
+        ON t1.iso3 = t2.iso3
+    SET t1.country = t2.country
+    WHERE t1.country <> t2.country AND t1.iso3 <> ''
+    
+
+Records scanned: 240
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:53,266 - INFO - Time taken: 0.772 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:54,186 - INFO - Successfully executed query:
+
+    UPDATE population_trans AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 240
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:54,186 - INFO - Time taken: 0.920 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:54,837 - INFO - Successfully executed query:
+
+    UPDATE temperature AS t1
+    INNER JOIN country_map AS t2
+        ON t1.country = t2.country_error
+    INNER JOIN iso AS t3
+        ON t2.country_code = t3.country_code
+    SET t1.country = t3.country
+    WHERE t1.country <> t3.country
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:14:54,838 - INFO - Time taken: 0.641 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:24,043 - INFO - Successfully executed query:
+
+    UPDATE temperature AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:24,043 - INFO - Time taken: 89.205 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:25,501 - INFO - Successfully executed query:
+SELECT * FROM emissions_gross;
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:25,501 - INFO - Time taken: 1.440 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:31,308 - INFO - Successfully executed query:
+SELECT * FROM temperature;
+
+Records scanned: 236045
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:31,309 - INFO - Time taken: 5.789 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:31,428 - INFO - Successfully executed query:
+SELECT * FROM population_trans;
+
+Records scanned: 2592
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:16:31,429 - INFO - Time taken: 0.103 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:02,260 - INFO - Successfully executed query:
+
+    SELECT
+        e.Country,
+        e.Record_year,
+        e.Total,
+        t.temp AS Temperature,
+        p.population AS Population
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    ORDER BY e.country, e.record_year
+
+Records scanned: 2292008
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:02,260 - INFO - Time taken: 30.819 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:03,141 - INFO - Successfully executed query:
+
+    SELECT
+        e.total AS emissions_total,
+        e.country AS emissions_country,
+        e.record_year AS emissions_year,
+        t.country AS temperature_country,
+        t.temp AS temperature_temp,
+        t.record_year AS temperature_year,
+        p.year AS population_year,
+        p.pop_perc AS population_percentage
+    FROM emissions_gross e
+    INNER JOIN temperature t
+        ON e.country_code = t.country_code AND e.record_year = t.record_year
+    INNER JOIN population_trans p
+        ON e.country_code = p.country_code AND e.record_year = p.year
+    ORDER BY emissions_country, emissions_year;
+    
+
+Records scanned: 33949
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:03,141 - INFO - Time taken: 0.871 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:57,464 - INFO - Successfully executed query:
+
+    SELECT
+        e.country,
+        e.record_year,
+        e.total,
+        e.coal,
+        e.oil,
+        e.gas,
+        e.cement,
+        e.flaring,
+        e.other,
+        e.per_capita,
+        t.temp AS Temperature,
+        p.density,
+        p.grow_rate,
+        p.pop_perc
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    
+
+Records scanned: 2292008
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:17:57,464 - INFO - Time taken: 54.307 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:21:43,359 - INFO - Successfully executed query:
+
+    CREATE VIEW etp_view
+    AS
+    SELECT
+        e.country,
+        e.record_year,
+        e.total,
+        e.coal,
+        e.oil,
+        e.gas,
+        e.cement,
+        e.flaring,
+        e.other,
+        e.per_capita,
+        t.temp AS Temperature,
+        p.density,
+        p.grow_rate,
+        p.pop_perc
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:21:43,359 - INFO - Time taken: 0.018 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:16,507 - INFO - Successfully executed query:
+
+    SELECT
+        country,
+        record_year,
+        MAX(total) AS max_emission,
+        MAX(Temperature) AS max_temperature
+    FROM etp_view
+    GROUP BY country, record_year
+    
+
+Records scanned: 11765
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:16,507 - INFO - Time taken: 3.369 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,508 - INFO - Successfully executed query:
+DELETE FROM iso_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,508 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,513 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/FAOSTAT_data_11-24-2020.csv'
+        INTO TABLE iso_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    country_code,
+    country,
+    m49_code,
+    iso2,
+    iso3,
+    year_start,
+    year_end
+    )
+    
+
+Records scanned: 321
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,513 - INFO - Time taken: 0.005 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,515 - INFO - Successfully executed query:
+
+    INSERT INTO iso
+    (
+    country_code,
+    country,
+    m49_code,
+    iso2,
+    iso3,
+    year_start,
+    year_end
+    )
+    SELECT
+        tp.country_code,
+        tp.country,
+        tp.m49_code,
+        tp.iso2,
+        tp.iso3,
+        tp.year_start,
+        tp.year_end
+    FROM iso_tempy AS tp
+    LEFT JOIN iso AS mn
+        ON tp.iso3 = mn.iso3
+    WHERE mn.iso3 IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,515 - INFO - Time taken: 0.002 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,517 - INFO - Successfully executed query:
+DELETE FROM iso_tempy
+
+Records scanned: 321
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,517 - INFO - Time taken: 0.002 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,536 - INFO - Successfully executed query:
+DELETE FROM emissions_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,536 - INFO - Time taken: 0.000 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,878 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/GCB2022v27_MtCO2_flat.csv'
+        INTO TABLE emissions_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    country,
+    iso3,
+    record_year,
+    total,
+    coal,
+    oil,
+    gas,
+    cement,
+    flaring,
+    other,
+    per_capita
+    )
+    
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:32,878 - INFO - Time taken: 0.341 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,112 - INFO - Successfully executed query:
+
+    INSERT INTO emissions_gross
+    (
+    country,
+    iso3,
+    record_year,
+    total,
+    coal,
+    oil,
+    gas,
+    cement,
+    flaring,
+    other,
+    per_capita
+    )
+    SELECT
+        tp.country,
+        tp.iso3,
+        tp.record_year,
+        tp.total,
+        tp.coal,
+        tp.oil,
+        tp.gas,
+        tp.cement,
+        tp.flaring,
+        tp.other,
+        tp.per_capita
+    FROM emissions_tempy AS tp
+    LEFT JOIN emissions_gross AS mn
+        ON tp.iso3 = mn.iso3 AND tp.record_year = mn.record_year
+    WHERE mn.iso3 IS NULL AND mn.record_year IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,112 - INFO - Time taken: 0.233 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,393 - INFO - Successfully executed query:
+DELETE FROM emissions_tempy
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,393 - INFO - Time taken: 0.280 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,409 - INFO - Successfully executed query:
+DELETE FROM population_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,409 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,415 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/world_population.csv'
+        INTO TABLE population_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    IGNORE 1 ROWS
+    (
+    pop_rank,
+    iso3,
+    country,
+    capital,
+    continent,
+    pop_2022,
+    pop_2020,
+    pop_2015,
+    pop_2010,
+    pop_2000,
+    pop_1990,
+    pop_1980,
+    pop_1970,
+    area,
+    density,
+    grow_rate,
+    pop_perc
+    )
+    
+
+Records scanned: 234
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,415 - INFO - Time taken: 0.006 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,422 - INFO - Successfully executed query:
+
+    INSERT INTO population
+    (
+    pop_rank,
+    iso3,
+    country,
+    capital,
+    continent,
+    pop_2022,
+    pop_2020,
+    pop_2015,
+    pop_2010,
+    pop_2000,
+    pop_1990,
+    pop_1980,
+    pop_1970,
+    area,
+    density,
+    grow_rate,
+    pop_perc
+    )
+    SELECT
+        tp.pop_rank,
+        tp.iso3,
+        tp.country,
+        tp.capital,
+        tp.continent,
+        tp.pop_2022,
+        tp.pop_2020,
+        tp.pop_2015,
+        tp.pop_2010,
+        tp.pop_2000,
+        tp.pop_1990,
+        tp.pop_1980,
+        tp.pop_1970,
+        tp.area,
+        tp.density,
+        tp.grow_rate,
+        tp.pop_perc
+    FROM population_tempy AS tp
+    LEFT JOIN population AS mn
+        ON tp.iso3 = mn.iso3
+    WHERE mn.iso3 IS NULL
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,422 - INFO - Time taken: 0.007 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,424 - INFO - Successfully executed query:
+DELETE FROM population_tempy
+
+Records scanned: 234
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:33,424 - INFO - Time taken: 0.002 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:34,630 - INFO - Successfully executed query:
+DELETE FROM temperature_tempy
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:34,630 - INFO - Time taken: 0.001 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:36,073 - INFO - Successfully executed query:
+
+    LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/FAOSTAT_data_1-10-2022_new.csv'
+        INTO TABLE temperature_tempy
+    FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '
+'
+    (
+    domain_code,
+    domain,
+    area_code,
+    country,
+    element_code,
+    element,
+    month_code,
+    month_name,
+    year_code,
+    record_year,
+    unit,
+    temp,
+    flag,
+    flag_desc
+    )
+    
+
+Records scanned: 229925
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:36,073 - INFO - Time taken: 1.444 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:37,148 - INFO - Successfully executed query:
+
+    INSERT INTO temperature
+    (
+    domain_code,
+    domain,
+    area_code,
+    country,
+    element_code,
+    element,
+    month_code,
+    month_name,
+    year_code,
+    record_year,
+    unit,
+    temp,
+    flag,
+    flag_desc
+    )
+    SELECT
+        tp.domain_code,
+        tp.domain,
+        tp.area_code,
+        tp.country,
+        tp.element_code,
+        tp.element,
+        tp.month_code,
+        tp.month_name,
+        tp.year_code,
+        tp.record_year,
+        tp.unit,
+        tp.temp,
+        tp.flag,
+        tp.flag_desc
+    FROM temperature_tempy AS tp
+    LEFT JOIN temperature AS mn
+        ON tp.country = mn.country AND tp.month_code = mn.month_code AND tp.year_code = mn.year_code
+    WHERE mn.country IS NULL AND  mn.month_code IS NULL AND mn.year_code IS NULL
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:37,148 - INFO - Time taken: 1.075 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:38,326 - INFO - Successfully executed query:
+DELETE FROM temperature_tempy
+
+Records scanned: 229925
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:38,326 - INFO - Time taken: 1.177 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:57,705 - INFO - Successfully executed query:
+
+    UPDATE emissions_gross AS t1
+    INNER JOIN iso AS t2
+        ON t1.iso3 = t2.iso3
+    SET t1.country = t2.country
+    WHERE t1.country <> t2.country AND t1.iso3 <> ''
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:22:57,706 - INFO - Time taken: 16.793 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:18,442 - INFO - Successfully executed query:
+
+    UPDATE emissions_gross AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:18,442 - INFO - Time taken: 20.736 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:19,252 - INFO - Successfully executed query:
+
+    UPDATE population_trans AS t1
+    INNER JOIN iso AS t2
+        ON t1.iso3 = t2.iso3
+    SET t1.country = t2.country
+    WHERE t1.country <> t2.country AND t1.iso3 <> ''
+    
+
+Records scanned: 240
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:19,252 - INFO - Time taken: 0.789 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:20,261 - INFO - Successfully executed query:
+
+    UPDATE population_trans AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 240
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:20,261 - INFO - Time taken: 1.009 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:20,840 - INFO - Successfully executed query:
+
+    UPDATE temperature AS t1
+    INNER JOIN country_map AS t2
+        ON t1.country = t2.country_error
+    INNER JOIN iso AS t3
+        ON t2.country_code = t3.country_code
+    SET t1.country = t3.country
+    WHERE t1.country <> t3.country
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:23:20,840 - INFO - Time taken: 0.568 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:46,166 - INFO - Successfully executed query:
+
+    UPDATE temperature AS t1
+    INNER JOIN iso AS t2
+        ON t1.country = t2.country
+    SET t1.country_code = t2.country_code
+    
+
+Records scanned: 2040
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:46,167 - INFO - Time taken: 85.327 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:47,630 - INFO - Successfully executed query:
+SELECT * FROM emissions_gross;
+
+Records scanned: 63104
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:47,630 - INFO - Time taken: 1.449 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:53,473 - INFO - Successfully executed query:
+SELECT * FROM temperature;
+
+Records scanned: 238085
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:53,473 - INFO - Time taken: 5.836 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:53,599 - INFO - Successfully executed query:
+SELECT * FROM population_trans;
+
+Records scanned: 2832
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:24:53,599 - INFO - Time taken: 0.114 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:25:28,005 - INFO - Successfully executed query:
+
+    SELECT
+        e.Country,
+        e.Record_year,
+        e.Total,
+        t.temp AS Temperature,
+        p.population AS Population
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    ORDER BY e.country, e.record_year
+
+Records scanned: 2552584
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:25:28,006 - INFO - Time taken: 34.395 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:25:28,966 - INFO - Successfully executed query:
+
+    SELECT
+        e.total AS emissions_total,
+        e.country AS emissions_country,
+        e.record_year AS emissions_year,
+        t.country AS temperature_country,
+        t.temp AS temperature_temp,
+        t.record_year AS temperature_year,
+        p.year AS population_year,
+        p.pop_perc AS population_percentage
+    FROM emissions_gross e
+    INNER JOIN temperature t
+        ON e.country_code = t.country_code AND e.record_year = t.record_year
+    INNER JOIN population_trans p
+        ON e.country_code = p.country_code AND e.record_year = p.year
+    ORDER BY emissions_country, emissions_year;
+    
+
+Records scanned: 37791
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:25:28,967 - INFO - Time taken: 0.947 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:32,349 - INFO - Successfully executed query:
+
+    SELECT
+        e.country,
+        e.record_year,
+        e.total,
+        e.coal,
+        e.oil,
+        e.gas,
+        e.cement,
+        e.flaring,
+        e.other,
+        e.per_capita,
+        t.temp AS Temperature,
+        p.density,
+        p.grow_rate,
+        p.pop_perc
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    
+
+Records scanned: 2552584
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:32,349 - INFO - Time taken: 63.374 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:32,914 - INFO - Successfully executed query:
+
+    CREATE VIEW etp_view
+    AS
+    SELECT
+        e.country,
+        e.record_year,
+        e.total,
+        e.coal,
+        e.oil,
+        e.gas,
+        e.cement,
+        e.flaring,
+        e.other,
+        e.per_capita,
+        t.temp AS Temperature,
+        p.density,
+        p.grow_rate,
+        p.pop_perc
+    FROM emissions_gross e
+    JOIN temperature t
+        ON e.country = t.country AND e.record_year = t.record_year
+    JOIN population_trans p
+        ON e.country = p.country
+    
+
+Records scanned: 0
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:32,915 - INFO - Time taken: 0.005 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:37,977 - INFO - Successfully executed query:
+
+    SELECT
+        country,
+        record_year,
+        MAX(total) AS max_emission,
+        MAX(Temperature) AS max_temperature
+    FROM etp_view
+    GROUP BY country, record_year
+    
+
+Records scanned: 11765
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+2023-02-24 14:26:37,977 - INFO - Time taken: 5.048 seconds
+>>>>>>>>>>>>>><<<<<<<<<<<<<<
+
+
