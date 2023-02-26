@@ -90,3 +90,4 @@ SELECT * FROM iso;
 SELECT * FROM emissions_gross;
 SELECT * FROM population_trans;
 SELECT * FROM temperature;
+SELECT * FROM country_map;
