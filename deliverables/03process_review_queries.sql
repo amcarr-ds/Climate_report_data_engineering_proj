@@ -86,8 +86,13 @@ GROUP BY t1.country, t3.country
 LIMIT 1000000;
 
 /*_______________________________________*/
-SELECT * FROM iso;
-SELECT * FROM emissions_gross;
-SELECT * FROM population_trans;
-SELECT * FROM temperature;
-SELECT * FROM country_map;
+SELECT * FROM iso
+LIMIT 1000000;
+SELECT * FROM emissions_gross
+LIMIT 1000000;
+SELECT * FROM population
+LIMIT 1000000;
+SELECT * FROM temperature
+LIMIT 1000000;
+SELECT * FROM country_map
+LIMIT 1000000;
