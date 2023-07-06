@@ -1,3 +1,0 @@
-Country Emissions: https://www.kaggle.com/datasets/thedevastator/global-fossil-co2-emissions-by-country-2002-2022
-Global Surface Temp: https://www.kaggle.com/datasets/thedevastator/global-land-and-surface-temperature-trends-analy
-Mental Health: https://www.kaggle.com/datasets/thedevastator/uncover-global-trends-in-mental-health-disorder
